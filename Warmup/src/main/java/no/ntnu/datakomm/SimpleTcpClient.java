@@ -1,7 +1,6 @@
 package no.ntnu.datakomm;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.InetSocketAddress;
 
@@ -13,6 +12,8 @@ public class SimpleTcpClient {
     private static final String HOST = "datakomm.work";
     // TCP port
     private static final int PORT = 1301;
+
+    private Socket socket;
 
     /**
      * Run the TCP Client.
@@ -109,7 +110,7 @@ public class SimpleTcpClient {
         // Remember to catch all possible exceptions that the Socket class can throw.
 
         try {
-            Socket socket = new Socket(host, port);
+            socket = new Socket(host, port);
             //returns true to confirm socket connection
             return true;
 
@@ -138,6 +139,8 @@ public class SimpleTcpClient {
             OutputStream out = socket.getOutputStream();
             out.write(request.getBytes());
 
+            return true;
+
         } catch (IOException e) {
             System.out.println("Socket error: " + e.getMessage());
         }
@@ -154,6 +157,21 @@ public class SimpleTcpClient {
     private String readResponseFromServer() {
         // TODO - implement this method
         // Similarly to other methods, exception can happen while trying to read the input stream of the TCP Socket
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String response;
+            do {
+                response = br.readLine();
+                if(response != null){
+                   return response;
+                }
+            }while (response != null);
+
+
+        } catch (IOException e) {
+            System.out.println("Socket error: " + e.getMessage());
+        }
+
         return null;
     }
 
