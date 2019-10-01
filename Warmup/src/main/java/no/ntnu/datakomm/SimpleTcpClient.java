@@ -2,7 +2,6 @@ package no.ntnu.datakomm;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.InetSocketAddress;
 
 /**
  * A Simple TCP client, used as a warm-up exercise for assignment A4.
@@ -14,6 +13,8 @@ public class SimpleTcpClient {
     private static final int PORT = 1301;
 
     private Socket socket;
+    private BufferedReader br;
+    private OutputStream out;
 
     /**
      * Run the TCP Client.
@@ -95,7 +96,18 @@ public class SimpleTcpClient {
      * @return True on success, false otherwise
      */
     private boolean closeConnection() {
-        return false;
+        boolean disconnected = false;
+        if (socket != null) {
+            try {
+                socket.close();
+                disconnected = true;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return disconnected;
     }
 
     /**
@@ -111,6 +123,9 @@ public class SimpleTcpClient {
 
         try {
             socket = new Socket(host, port);
+            InputStream in = socket.getInputStream();
+            br = new BufferedReader(new InputStreamReader(in));
+            out = socket.getOutputStream();
             //returns true to confirm socket connection
             return true;
 
@@ -119,6 +134,7 @@ public class SimpleTcpClient {
         }
 
         //returns false to confirm socket failed connection
+
         return false;
     }
 
@@ -136,8 +152,9 @@ public class SimpleTcpClient {
         // * Connection not opened.
         // * What is the request is null or empty?
         try {
-            OutputStream out = socket.getOutputStream();
-            out.write(request.getBytes());
+            String commandToSend = request + "\n";
+            out.write(commandToSend.getBytes());
+            out.flush();
 
             return true;
 
@@ -158,14 +175,15 @@ public class SimpleTcpClient {
         // TODO - implement this method
         // Similarly to other methods, exception can happen while trying to read the input stream of the TCP Socket
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
             String response;
-            do {
+
                 response = br.readLine();
                 if(response != null){
+
                    return response;
                 }
-            }while (response != null);
+
 
 
         } catch (IOException e) {
