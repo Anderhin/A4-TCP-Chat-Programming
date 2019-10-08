@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TCPClient {
     private PrintWriter toServer;
@@ -22,12 +24,35 @@ public class TCPClient {
      * @param port TCP port of the chat server
      * @return True on success, false otherwise
      */
-    public boolean connect(String host, int port) {
-        // TODO Step 1: implement this method
-        // Hint: Remember to process all exceptions and return false on error
-        // Hint: Remember to set up all the necessary input/output stream variables
-        return false;
+    public boolean connect(String host, int port) 
+    {
+        boolean connected = false; 
+        
+        InetSocketAddress serverAddress = new InetSocketAddress(host, port);
+        
+        
+        try 
+        {
+            connection = new Socket();
+            connection.connect(serverAddress);            
+            toServer = new PrintWriter(connection.getOutputStream(), true);
+            InputStream in = connection.getInputStream();
+            fromServer = new BufferedReader(new InputStreamReader(in));
+            
+            connected = true;
+
+        }
+        catch (IOException ex) 
+        {
+            ex.printStackTrace();
+        }
+    
+        return connected;        
+
+         
     }
+
+    //TestKommentar
 
     /**
      * Close the socket. This method must be synchronized, because several
