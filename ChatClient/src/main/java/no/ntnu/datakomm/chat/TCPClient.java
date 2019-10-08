@@ -52,7 +52,6 @@ public class TCPClient {
          
     }
 
-    //TestKommentar
 
     /**
      * Close the socket. This method must be synchronized, because several
@@ -81,10 +80,24 @@ public class TCPClient {
      * @param cmd A command. It should include the command word and optional attributes, according to the protocol.
      * @return true on success, false otherwise
      */
-    private boolean sendCommand(String cmd) {
+    private boolean sendCommand(String cmd)
+    {
+        try {
+
+
+                this.toServer.println(cmd);
+                return true;
+
+            
+            }
+                catch (Exception e)
+            {
+                System.out.println(e);
+                return false;
+            }
+
         // TODO Step 2: Implement this method
         // Hint: Remember to check if connection is active
-        return false;
     }
 
     /**
@@ -93,11 +106,24 @@ public class TCPClient {
      * @param message Message to send
      * @return true if message sent, false on error
      */
-    public boolean sendPublicMessage(String message) {
+    public boolean sendPublicMessage(String message)
+    {
+        try
+        {
+            sendCommand(message);
+            return true;
+        }
+
+        catch (Exception e)
+        {
+            System.out.println(e);
+            return false;
+        }
+
         // TODO Step 2: implement this method
         // Hint: Reuse sendCommand() method
         // Hint: update lastError if you want to store the reason for the error.
-        return false;
+
     }
 
     /**
