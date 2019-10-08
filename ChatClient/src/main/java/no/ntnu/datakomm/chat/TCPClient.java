@@ -83,14 +83,14 @@ public class TCPClient {
     private boolean sendCommand(String cmd)
     {
         try {
-             if (connect() == true)
-            {
+
 
                 this.toServer.println(cmd);
                 return true;
 
+            
             }
-        } catch (Exception e)
+                catch (Exception e)
             {
                 System.out.println(e);
                 return false;
