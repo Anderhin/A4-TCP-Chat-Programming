@@ -82,23 +82,19 @@ public class TCPClient {
      */
     private boolean sendCommand(String cmd)
     {
+        try {
+             if (connect() == true)
+            {
 
+                this.toServer.println(cmd);
+                return true;
 
-        try
-        {
-
-            this.toServer.println(cmd);
-
-            return true;
-
-        }
-        catch (Exception e)
-        {
-            System.out.println(e);
-            return false;
-        }
-
-
+            }
+        } catch (Exception e)
+            {
+                System.out.println(e);
+                return false;
+            }
 
         // TODO Step 2: Implement this method
         // Hint: Remember to check if connection is active
@@ -110,11 +106,24 @@ public class TCPClient {
      * @param message Message to send
      * @return true if message sent, false on error
      */
-    public boolean sendPublicMessage(String message) {
+    public boolean sendPublicMessage(String message)
+    {
+        try
+        {
+            sendCommand(message);
+            return true;
+        }
+
+        catch (Exception e)
+        {
+            System.out.println(e);
+            return false;
+        }
+
         // TODO Step 2: implement this method
         // Hint: Reuse sendCommand() method
         // Hint: update lastError if you want to store the reason for the error.
-        return false;
+
     }
 
     /**
