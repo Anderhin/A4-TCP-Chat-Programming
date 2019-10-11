@@ -82,19 +82,20 @@ public class TCPClient {
      */
     private boolean sendCommand(String cmd)
     {
+        boolean result = false;
         try {
 
-
-                this.toServer.println(cmd);
-                return true;
+            this.toServer.println(cmd);
+                result = true;
 
 
             }
                 catch (Exception e)
             {
                 System.out.println(e);
-                return false;
+                result = false;
             }
+        return result;
 
         // TODO Step 2: Implement this method
         // Hint: Remember to check if connection is active
@@ -108,17 +109,19 @@ public class TCPClient {
      */
     public boolean sendPublicMessage(String message)
     {
+        boolean result = false;
         try
         {
             sendCommand(message);
-            return true;
+            result = true;
         }
 
         catch (Exception e)
         {
             System.out.println(e);
-            return false;
+            result = false;
         }
+        return result;
 
         // TODO Step 2: implement this method
         // Hint: Reuse sendCommand() method
