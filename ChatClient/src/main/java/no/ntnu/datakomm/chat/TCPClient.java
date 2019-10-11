@@ -12,7 +12,7 @@ public class TCPClient {
     private BufferedReader fromServer;
     private Socket connection;
 
-    //test kommentar
+    //test 
 
     // Hint: if you want to store a message for the last error, store it here
     private String lastError = null;
