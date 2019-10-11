@@ -306,9 +306,9 @@ public class TCPClient {
      * Notify listeners that socket was closed by the remote end (server or
      * Internet error)
      */
-    private void onDisconnect(boolean success, String errMsg) {
-        for (ChatListener 1 : listeners) {
-            1.onDisconnect(success, errMsg);
+    private void onDisconnect() {
+        for (ChatListener l : listeners) {
+            l.onDisconnect();
         }
         // TODO Step 4: Implement this method
         // Hint: all the onXXX() methods will be similar to onLoginResult()
