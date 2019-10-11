@@ -26,32 +26,32 @@ public class TCPClient {
      * @param port TCP port of the chat server
      * @return True on success, false otherwise
      */
-    public boolean connect(String host, int port) 
+    public boolean connect(String host, int port)
     {
-        boolean connected = false; 
-        
+        boolean connected = false;
+
         InetSocketAddress serverAddress = new InetSocketAddress(host, port);
-        
-        
-        try 
+
+
+        try
         {
             connection = new Socket();
-            connection.connect(serverAddress);            
+            connection.connect(serverAddress);
             toServer = new PrintWriter(connection.getOutputStream(), true);
             InputStream in = connection.getInputStream();
             fromServer = new BufferedReader(new InputStreamReader(in));
-            
+
             connected = true;
 
         }
-        catch (IOException ex) 
+        catch (IOException ex)
         {
             ex.printStackTrace();
         }
-    
-        return connected;        
 
-         
+        return connected;
+
+
     }
 
 
@@ -65,6 +65,7 @@ public class TCPClient {
      * that no two threads call this method in parallel.
      */
     public synchronized void disconnect() {
+
         // TODO Step 4: implement this method
         // Hint: remember to check if connection is active
     }
@@ -88,15 +89,15 @@ public class TCPClient {
         try {
 
             this.toServer.println(cmd);
-                result = true;
+            result = true;
 
 
-            }
-                catch (Exception e)
-            {
-                System.out.println(e);
-                result = false;
-            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+            result = false;
+        }
         return result;
 
         // TODO Step 2: Implement this method
@@ -201,9 +202,9 @@ public class TCPClient {
 
         }
         catch (IOException e)
-            {
-                System.out.println(e.getMessage());
-            }
+        {
+            System.out.println(e.getMessage());
+        }
 
 
         // with the stream and hence the socket. Probably a good idea to close the socket in that case.
@@ -243,6 +244,43 @@ public class TCPClient {
      */
     private void parseIncomingCommands() {
         while (isConnectionActive()) {
+
+            String serverResponse = waitServerResponse(); //Lagrer server responsen som en String
+            String inputCase = null;
+            String serverMessage = "";
+
+            if (serverResponse != null) {
+                String[] responseArr = serverResponse.split(" ", 2); //Legger til responen i en array, og splitter første ordet some er koden i inputcase
+                inputCase = responseArr[0]; //Bytter til riktig case iforhold til serverresponsen
+                if (responseArr.length > 1){
+                    serverMessage = responseArr[1];
+                }
+            }
+
+            switch (inputCase){
+                case "loginok":
+                    onLoginResult(true, "");
+                    break;
+
+                case "loginerr":
+                    onLoginResult(false,serverMessage);
+                    break;
+
+                case "msgerr":
+                    break;
+
+                case "supported":
+                    break;
+
+                case "cmderr":
+                    break;
+
+
+                default:
+                    break;
+            }
+
+
             // TODO Step 3: Implement this method
             // Hint: Reuse waitServerResponse() method
             // Hint: Have a switch-case (or other way) to check what type of response is received from the server
