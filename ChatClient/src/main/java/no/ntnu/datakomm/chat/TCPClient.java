@@ -1,7 +1,10 @@
 package no.ntnu.datakomm.chat;
 
+import javafx.scene.chart.ScatterChart;
+
 import java.io.*;
 import java.net.*;
+import java.nio.channels.ScatteringByteChannel;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -65,6 +68,19 @@ public class TCPClient {
      * that no two threads call this method in parallel.
      */
     public synchronized void disconnect() {
+
+
+        try {
+            if (isConnectionActive())
+            {
+                connection.close();
+                onDisconnect();
+                connection = null;
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // TODO Step 4: implement this method
         // Hint: remember to check if connection is active
@@ -199,11 +215,9 @@ public class TCPClient {
 
         String response = null;
 
-
         try
         {
             response = fromServer.readLine();
-
         }
         catch (IOException e)
         {
@@ -211,6 +225,8 @@ public class TCPClient {
         }
 
         return response;
+
+
 
         // with the stream and hence the socket. Probably a good idea to close the socket in that case.
 
@@ -248,57 +264,65 @@ public class TCPClient {
      * the connection is closed.
      */
     private void parseIncomingCommands() {
-        while (isConnectionActive()) {
+        try {
 
-            String serverResponse = waitServerResponse(); //Lagrer server responsen som en String
-            String inputCase = null;
-            String serverMessage = "";
+            while (isConnectionActive()) {
 
-            if (serverResponse != null) {
-                String[] responseArr = serverResponse.split(" ", 2); //Legger til responen i en array, og splitter første ordet some er koden i inputcase
-                inputCase = responseArr[0]; //Bytter til riktig case iforhold til serverresponsen
-                if (responseArr.length > 1){
-                    serverMessage = responseArr[1];
+                String serverResponse = waitServerResponse(); //Lagrer server responsen som en String
+                String inputCase = null;
+                String serverMessage = "";
+
+                if (serverResponse != null) {
+                    String[] responseArr = serverResponse.split(" ", 2); //Legger til responen i en array, og splitter første ordet some er koden i inputcase
+                    inputCase = responseArr[0]; //Bytter til riktig case iforhold til serverresponsen
+                    if (responseArr.length > 1) {
+                        serverMessage = responseArr[1];
+                    }
+
+
+                }
+
+                switch (inputCase) {
+                    case "loginok":
+                        onLoginResult(true, "");
+                        break;
+
+                    case "loginerr":
+                        onLoginResult(false, serverMessage);
+                        break;
+
+                    case "msgerr":
+                        getLastError();
+
+                        break;
+
+                    case "supported":
+
+                        break;
+
+                    case "cmderr":
+                        break;
+
+                    case "users":
+                        String[] usersArr = serverMessage.split(" ");
+                        onUsersList(usersArr);
+                        break;
+
+
+                    default:
+                        break;
                 }
 
 
             }
-
-            switch (inputCase){
-                case "loginok":
-                    onLoginResult(true, "");
-                    break;
-
-                case "loginerr":
-                    onLoginResult(false,serverMessage);
-                    break;
-
-                case "msgerr":
-                    getLastError();
-
-                    break;
-
-                case "supported":
-
-                    break;
-
-                case "cmderr":
-                    break;
-
-                case "users":
-                    String[] usersArr = serverMessage.split(" ");
-                    onUsersList(usersArr);
-                    break;
-
-
-                default:
-                    break;
-            }
+        }catch (NullPointerException e)
+        {
+            //System.out.println(e);
+        }
 
 
 
-
-            // TODO Step 3: Implement this method
+        // TODO Step 3: Implement this method
             // Hint: Reuse waitServerResponse() method
             // Hint: Have a switch-case (or other way) to check what type of response is received from the server
             // and act on it.
@@ -316,7 +340,7 @@ public class TCPClient {
             // TODO Step 8: add support for incoming supported command list (type: supported)
 
         }
-    }
+
 
     /**
      * Register a new listener for events (login result, incoming message, etc)
