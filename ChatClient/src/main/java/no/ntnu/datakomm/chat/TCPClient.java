@@ -190,6 +190,9 @@ public class TCPClient {
      * @return true if message sent, false on error
      */
     public boolean sendPrivateMessage(String recipient, String message) {
+
+        String privMessage = recipient + message +"\n";
+        sendCommand(privMessage);
         // TODO Step 6: Implement this method
         // Hint: Reuse sendCommand() method
         // Hint: update lastError if you want to store the reason for the error.
@@ -283,7 +286,7 @@ public class TCPClient {
                 }
 
                 switch (inputCase) {
-                    case "loginok":
+                    case "loginok\n":
                         onLoginResult(true, "");
                         break;
 
@@ -297,11 +300,11 @@ public class TCPClient {
                         break;
 
                     case "supported":
-                        sendCommand("supported command not supported\n");
+                        //sendCommand("supported command not supported\n");
                         break;
 
                     case "cmderr":
-                        sendCommand("cmderr command not supported\n");
+                        //sendCommand("cmderr command not supported\n");
                         break;
 
                     case "users":
@@ -309,6 +312,11 @@ public class TCPClient {
                         onUsersList(usersArr);
                         break;
 
+                    case "msg":
+                        break;
+
+                    case "privmsg":
+                        break;
 
                     default:
                         break;
