@@ -297,10 +297,11 @@ public class TCPClient {
                         break;
 
                     case "supported":
-
+                        sendCommand("supported command not supported\n");
                         break;
 
                     case "cmderr":
+                        sendCommand("cmderr command not supported\n");
                         break;
 
                     case "users":
