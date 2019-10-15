@@ -1,5 +1,6 @@
 package no.ntnu.datakomm.chat;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.scene.chart.ScatterChart;
 
 import java.io.*;
@@ -313,7 +314,9 @@ public class TCPClient {
                         break;
 
                     case "msg":
-                        this.toServer.println(serverMessage);
+                        //usikker på dette
+                        boolean priv = false;
+                        onMsgReceived(priv, ??? , serverMessage);
                         break;
 
                     case "privmsg":
@@ -423,6 +426,11 @@ public class TCPClient {
      * @param text   Message text
      */
     private void onMsgReceived(boolean priv, String sender, String text) {
+        //Usikker på dette
+
+        for (ChatListener l : listeners){
+            l.onMessageReceived(new TextMessage(sender,priv,text));
+        }
         // TODO Step 7: Implement this method
     }
 
