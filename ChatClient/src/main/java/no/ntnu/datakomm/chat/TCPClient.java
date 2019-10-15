@@ -313,9 +313,11 @@ public class TCPClient {
                         break;
 
                     case "msg":
+                        this.toServer.println(serverMessage);
                         break;
 
                     case "privmsg":
+
                         break;
 
                     default:
