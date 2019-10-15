@@ -141,7 +141,10 @@ public class TCPClient {
     {
         try
         {
-            sendCommand(username);
+            String login = "login " + username;
+            sendCommand(login);
+
+
         }
         catch (Exception e)
         {
@@ -158,6 +161,7 @@ public class TCPClient {
      */
     public void refreshUserList() {
         // TODO Step 5: implement this method
+        sendCommand("users");
         // Hint: Use Wireshark and the provided chat client reference app to find out what commands the
         // client and server exchange for user listing.
     }
@@ -206,9 +210,10 @@ public class TCPClient {
             System.out.println(e.getMessage());
         }
 
+        return response;
 
         // with the stream and hence the socket. Probably a good idea to close the socket in that case.
-        return response;
+
 
 
     }
@@ -255,6 +260,8 @@ public class TCPClient {
                 if (responseArr.length > 1){
                     serverMessage = responseArr[1];
                 }
+
+
             }
 
             switch (inputCase){
@@ -267,18 +274,28 @@ public class TCPClient {
                     break;
 
                 case "msgerr":
+                    getLastError();
+
                     break;
 
                 case "supported":
+
                     break;
 
                 case "cmderr":
+                    break;
+
+                case "users":
+                    String[] usersArr = serverMessage.split(" ");
+                    onUsersList(usersArr);
                     break;
 
 
                 default:
                     break;
             }
+
+
 
 
             // TODO Step 3: Implement this method
@@ -357,8 +374,10 @@ public class TCPClient {
      *
      * @param users List with usernames
      */
-    private void onUsersList(String[] users) {
-        // TODO Step 5: Implement this method
+    private void onUsersList(String[] users)
+    {
+        for (ChatListener l : listeners)
+            l.onUserList(users);
     }
 
     /**
