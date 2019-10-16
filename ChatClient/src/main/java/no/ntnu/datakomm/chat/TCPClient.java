@@ -192,7 +192,7 @@ public class TCPClient {
      */
     public boolean sendPrivateMessage(String recipient, String message) {
 
-        String privMessage = recipient + message +"\n";
+        String privMessage = "privmsg" + " " + recipient + " " + message +"\n";
         sendCommand(privMessage);
         // TODO Step 6: Implement this method
         // Hint: Reuse sendCommand() method
@@ -318,8 +318,7 @@ public class TCPClient {
                             String[] messageArr = serverMessage.split("",2);
                             String sender = messageArr[0];
                             String publicMessage = messageArr[1];
-                            boolean priv = false;
-                            onMsgReceived(priv, sender , publicMessage);
+                            onMsgReceived(false, sender , publicMessage);
 
                         }
                         break;
@@ -329,8 +328,7 @@ public class TCPClient {
                             String[] messageArr = serverMessage.split("",2);
                             String sender = messageArr[0];
                             String privateMessage = messageArr[1];
-                            boolean priv = true;
-                            onMsgReceived(priv, sender , privateMessage);
+                            onMsgReceived(true, sender , privateMessage);
                         }
 
                         break;
