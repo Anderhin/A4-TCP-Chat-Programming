@@ -296,8 +296,7 @@ public class TCPClient {
                         break;
 
                     case "msgerr":
-                        getLastError();
-
+                        onMsgError(serverMessage);
                         break;
 
                     case "supported":
@@ -305,7 +304,7 @@ public class TCPClient {
                         break;
 
                     case "cmderr":
-                        //sendCommand("cmderr command not supported\n");
+                        onCmdError(serverMessage);
                         break;
 
                     case "users":
@@ -319,7 +318,6 @@ public class TCPClient {
                             String sender = messageArr[0];
                             String publicMessage = messageArr[1];
                             onMsgReceived(false, sender , publicMessage);
-
                         }
                         break;
 
@@ -330,7 +328,6 @@ public class TCPClient {
                             String privateMessage = messageArr[1];
                             onMsgReceived(true, sender , privateMessage);
                         }
-
                         break;
 
                     default:
@@ -436,7 +433,6 @@ public class TCPClient {
      * @param text   Message text
      */
     private void onMsgReceived(boolean priv, String sender, String text) {
-        //Usikker på dette
 
         for (ChatListener l : listeners){
             l.onMessageReceived(new TextMessage(sender,priv,text));
@@ -450,6 +446,9 @@ public class TCPClient {
      * @param errMsg Error description returned by the server
      */
     private void onMsgError(String errMsg) {
+        for (ChatListener l :listeners){
+            l.onMessageError(errMsg);
+        }
         // TODO Step 7: Implement this method
     }
 
@@ -459,7 +458,10 @@ public class TCPClient {
      * @param errMsg Error message
      */
     private void onCmdError(String errMsg) {
-        // TODO Step 7: Implement this method
+        for (ChatListener l : listeners) {
+            l.onCommandError(errMsg);
+            // TODO Step 7: Implement this method
+        }
     }
 
     /**
