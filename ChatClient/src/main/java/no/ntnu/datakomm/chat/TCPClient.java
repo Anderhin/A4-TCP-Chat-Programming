@@ -314,12 +314,24 @@ public class TCPClient {
                         break;
 
                     case "msg":
-                        //usikker på dette
-                        boolean priv = false;
-                        onMsgReceived(priv, ??? , serverMessage);
+                        if (serverMessage != null){
+                            String[] messageArr = serverMessage.split("",2);
+                            String sender = messageArr[0];
+                            String publicMessage = messageArr[1];
+                            boolean priv = false;
+                            onMsgReceived(priv, sender , publicMessage);
+
+                        }
                         break;
 
                     case "privmsg":
+                        if (serverMessage != null){
+                            String[] messageArr = serverMessage.split("",2);
+                            String sender = messageArr[0];
+                            String privateMessage = messageArr[1];
+                            boolean priv = true;
+                            onMsgReceived(priv, sender , privateMessage);
+                        }
 
                         break;
 
