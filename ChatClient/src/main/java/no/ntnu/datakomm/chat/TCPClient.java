@@ -193,11 +193,12 @@ public class TCPClient {
     public boolean sendPrivateMessage(String recipient, String message) {
 
         String privMessage = "privmsg" + " " + recipient + " " + message +"\n";
-        sendCommand(privMessage);
+        return sendCommand(privMessage);
+
         // TODO Step 6: Implement this method
         // Hint: Reuse sendCommand() method
         // Hint: update lastError if you want to store the reason for the error.
-        return false;
+
     }
 
 
@@ -205,6 +206,8 @@ public class TCPClient {
      * Send a request for the list of commands that server supports.
      */
     public void askSupportedCommands() {
+        sendCommand("help");
+
         // TODO Step 8: Implement this method
         // Hint: Reuse sendCommand() method
     }
@@ -300,7 +303,8 @@ public class TCPClient {
                         break;
 
                     case "supported":
-                        //sendCommand("supported command not supported\n");
+                        String[] supportedCommands = serverMessage.split(" ");
+                        onSupported(supportedCommands);
                         break;
 
                     case "cmderr":
@@ -471,6 +475,9 @@ public class TCPClient {
      * @param commands Commands supported by the server
      */
     private void onSupported(String[] commands) {
+        for (ChatListener l : listeners){
+            l.onSupportedCommands(commands);
+        }
         // TODO Step 8: Implement this method
     }
 }
