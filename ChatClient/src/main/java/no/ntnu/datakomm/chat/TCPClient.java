@@ -325,7 +325,7 @@ public class TCPClient {
 
                     case "privmsg":
                         if (serverMessage != null){
-                            String[] messageArr = serverMessage.split("",2);
+                            String[] messageArr = serverMessage.split(" ",2);
                             String sender = messageArr[0];
                             String privateMessage = messageArr[1];
                             onMsgReceived(true, sender , privateMessage);
