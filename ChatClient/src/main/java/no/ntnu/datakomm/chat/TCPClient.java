@@ -132,7 +132,7 @@ public class TCPClient {
         boolean result = false;
         try
         {
-            sendCommand(message);
+            sendCommand("msg" + " " + message);
             result = true;
         }
 
@@ -315,7 +315,7 @@ public class TCPClient {
 
                     case "msg":
                         if (serverMessage != null){
-                            String[] messageArr = serverMessage.split("",2);
+                            String[] messageArr = serverMessage.split(" ",2);
                             String sender = messageArr[0];
                             String publicMessage = messageArr[1];
                             onMsgReceived(false, sender , publicMessage);
