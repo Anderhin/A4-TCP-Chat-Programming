@@ -16,9 +16,6 @@ public class TCPClient {
     private BufferedReader fromServer;
     private Socket connection;
 
-    //test 
-
-    // Hint: if you want to store a message for the last error, store it here
     private String lastError = null;
 
     private final List<ChatListener> listeners = new LinkedList<>();
@@ -83,8 +80,6 @@ public class TCPClient {
             e.printStackTrace();
         }
 
-        // TODO Step 4: implement this method
-        // Hint: remember to check if connection is active
     }
 
     /**
@@ -117,8 +112,6 @@ public class TCPClient {
         }
         return result;
 
-        // TODO Step 2: Implement this method
-        // Hint: Remember to check if connection is active
     }
 
     /**
@@ -143,10 +136,6 @@ public class TCPClient {
         }
         return result;
 
-        // TODO Step 2: implement this method
-        // Hint: Reuse sendCommand() method
-        // Hint: update lastError if you want to store the reason for the error.
-
     }
 
     /**
@@ -168,8 +157,6 @@ public class TCPClient {
             System.out.println(e);
         }
 
-        // TODO Step 3: implement this method
-        // Hint: Reuse sendCommand() method
     }
 
     /**
@@ -177,10 +164,9 @@ public class TCPClient {
      * clear your current user list and use events in the listener.
      */
     public void refreshUserList() {
-        // TODO Step 5: implement this method
+
         sendCommand("users");
-        // Hint: Use Wireshark and the provided chat client reference app to find out what commands the
-        // client and server exchange for user listing.
+
     }
 
     /**
@@ -195,9 +181,6 @@ public class TCPClient {
         String privMessage = "privmsg" + " " + recipient + " " + message +"\n";
         return sendCommand(privMessage);
 
-        // TODO Step 6: Implement this method
-        // Hint: Reuse sendCommand() method
-        // Hint: update lastError if you want to store the reason for the error.
 
     }
 
@@ -208,8 +191,6 @@ public class TCPClient {
     public void askSupportedCommands() {
         sendCommand("help");
 
-        // TODO Step 8: Implement this method
-        // Hint: Reuse sendCommand() method
     }
 
     /**
@@ -232,12 +213,6 @@ public class TCPClient {
         }
 
         return response;
-
-
-
-        // with the stream and hence the socket. Probably a good idea to close the socket in that case.
-
-
 
     }
 
@@ -345,25 +320,6 @@ public class TCPClient {
             //System.out.println(e);
         }
 
-
-
-        // TODO Step 3: Implement this method
-            // Hint: Reuse waitServerResponse() method
-            // Hint: Have a switch-case (or other way) to check what type of response is received from the server
-            // and act on it.
-            // Hint: In Step 3 you need to handle only login-related responses.
-            // Hint: In Step 3 reuse onLoginResult() method
-
-            // TODO Step 5: update this method, handle user-list response from the server
-            // Hint: In Step 5 reuse onUserList() method
-
-            // TODO Step 7: add support for incoming chat messages from other users (types: msg, privmsg)
-            // TODO Step 7: add support for incoming message errors (type: msgerr)
-            // TODO Step 7: add support for incoming command errors (type: cmderr)
-            // Hint for Step 7: call corresponding onXXX() methods which will notify all the listeners
-
-            // TODO Step 8: add support for incoming supported command list (type: supported)
-
         }
 
 
@@ -414,8 +370,7 @@ public class TCPClient {
         for (ChatListener l : listeners) {
             l.onDisconnect();
         }
-        // TODO Step 4: Implement this method
-        // Hint: all the onXXX() methods will be similar to onLoginResult()
+
     }
 
     /**
@@ -441,7 +396,7 @@ public class TCPClient {
         for (ChatListener l : listeners){
             l.onMessageReceived(new TextMessage(sender,priv,text));
         }
-        // TODO Step 7: Implement this method
+
     }
 
     /**
@@ -453,7 +408,7 @@ public class TCPClient {
         for (ChatListener l :listeners){
             l.onMessageError(errMsg);
         }
-        // TODO Step 7: Implement this method
+
     }
 
     /**
@@ -464,7 +419,7 @@ public class TCPClient {
     private void onCmdError(String errMsg) {
         for (ChatListener l : listeners) {
             l.onCommandError(errMsg);
-            // TODO Step 7: Implement this method
+
         }
     }
 
@@ -478,6 +433,6 @@ public class TCPClient {
         for (ChatListener l : listeners){
             l.onSupportedCommands(commands);
         }
-        // TODO Step 8: Implement this method
+
     }
 }
