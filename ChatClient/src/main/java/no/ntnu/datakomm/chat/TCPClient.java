@@ -178,7 +178,7 @@ public class TCPClient {
      */
     public boolean sendPrivateMessage(String recipient, String message) {
 
-        String privMessage = "privmsg" + " " + recipient + " " + message +"\n";
+        String privMessage = "privmsg" + " " + recipient + " " + message;
         return sendCommand(privMessage);
 
 
